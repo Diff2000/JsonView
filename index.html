@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JsonView</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>JsonView</h1>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="paste" role="tab">Lim inn</button>
+      <button class="tab" data-tab="file" role="tab">Fil</button>
+      <button class="tab" data-tab="url" role="tab">URL / curl</button>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="input-panel">
+      <div class="pane active" data-pane="paste">
+        <textarea id="pasteInput" spellcheck="false" placeholder='Lim inn JSON her, f.eks. {"navn": "verdi"}'></textarea>
+        <div class="actions">
+          <button id="pasteView" class="primary">Vis</button>
+          <button id="pasteFormat">Formater</button>
+          <button id="pasteClear">Tøm</button>
+        </div>
+      </div>
+
+      <div class="pane" data-pane="file">
+        <label id="dropZone" class="dropzone">
+          <input id="fileInput" type="file" accept=".json,application/json,text/plain" hidden>
+          <strong>Slipp en JSON-fil her</strong>
+          <span>eller klikk for å velge fil</span>
+        </label>
+        <p class="hint">Du kan også slippe en fil hvor som helst i vinduet.</p>
+      </div>
+
+      <div class="pane" data-pane="url">
+        <label class="field">
+          <span>URL eller curl-kommando</span>
+          <textarea id="urlInput" rows="4" spellcheck="false" placeholder='https://eksempel.firebaseio.com/sti.json?auth=%token%
+eller: curl --location --request GET "https://..."'></textarea>
+        </label>
+        <label class="field">
+          <span>Token (erstatter <code>%token%</code> i URL, headere og body)</span>
+          <input id="tokenInput" type="password" autocomplete="off" spellcheck="false" placeholder="Lagres kun i denne fanen">
+        </label>
+        <div id="placeholders"></div>
+        <div class="row-fields">
+          <label class="field small">
+            <span>Metode</span>
+            <select id="methodInput">
+              <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+            </select>
+          </label>
+          <label class="field grow">
+            <span>Headere (én per linje, <code>Navn: verdi</code>)</span>
+            <textarea id="headersInput" rows="2" spellcheck="false"></textarea>
+          </label>
+        </div>
+        <label class="field" id="bodyField" hidden>
+          <span>Body</span>
+          <textarea id="bodyInput" rows="3" spellcheck="false"></textarea>
+        </label>
+        <p class="hint">Skriv f.eks. <code>...raw.json?auth=%token%</code>. Andre plassholdere, som <code>%idTokenFromAuthHere%</code>, får egne felt ovenfor. Alle erstattes før henting.</p>
+        <div class="actions">
+          <button id="fetchBtn" class="primary">Hent</button>
+        </div>
+      </div>
+
+      <div id="message" class="message" hidden></div>
+    </section>
+
+    <section class="viewer-panel">
+      <div class="viewer-toolbar">
+        <input id="searchInput" type="search" placeholder="Søk i nøkler og verdier…">
+        <span id="matchCount" class="match-count"></span>
+        <button id="expandAll" title="Åpne alle">Åpne alle</button>
+        <button id="collapseAll" title="Lukk alle">Lukk alle</button>
+        <button id="rawToggle" title="Vis rå JSON">Rå</button>
+      </div>
+      <div id="viewer" class="viewer">
+        <div class="empty">Ingen data ennå. Lim inn JSON, slipp en fil eller hent fra en URL.</div>
+      </div>
+      <footer class="statusbar">
+        <span id="pathLabel" class="path">&nbsp;</span>
+        <span class="status-actions">
+          <button id="copyPath" disabled>Kopier sti</button>
+          <button id="copyValue" disabled>Kopier verdi</button>
+        </span>
+      </footer>
+    </section>
+  </main>
+
+  <div id="dropOverlay" class="drop-overlay" hidden><div>Slipp JSON-filen for å åpne den</div></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
